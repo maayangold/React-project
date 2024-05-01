@@ -2,8 +2,8 @@
 import * as actionType from './action'
 
 const initialState = {
-    user:null
-}
+    user: null
+  };
 
 export default function ReducerUser(state = initialState, action) {
     switch (action.type) {

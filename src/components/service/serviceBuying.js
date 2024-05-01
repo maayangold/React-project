@@ -10,29 +10,32 @@ export const getBuying = (userId) => {
 }
 export const deleteBuying = (productId) => {
     return dispatch => {
-
+        
         Swal.fire({
             title: "אתה בטוח שאתה רוצה למחוק?",
-            showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: "למחוק",
-            denyButtonText: `לא למחוק`
+            confirmButtonText: "Delete",
+            denyButtonText: `Cancel`,
+            position:"top"
         }).then((result) => {
 
             if (result.isConfirmed) {
                 axios.post(`http://localhost:8080/api/bay/delete/${productId}`)
-                    .then((res) => {
+                    .then(() => {
                         dispatch({ type: 'DELETE_BUYING', payload: productId })
-                        Swal.fire({ icon: 'success', position: 'center', title: '!המוצר נמחק בהצלחה' });
+                        .catch((error) => Swal.fire({ icon: 'success', position: 'top', title: '!!המוצר נמחק בהצלחה' }))
+
 
                     })
-                    // .catch((error) => Swal.fire({ icon: 'error', position: 'center', title: error.response?.data }))
-                    .catch((error) => Swal.fire({ icon: 'success', position: 'center', title: '!!המוצר נמחק בהצלחה' }))
-
-            } else
-                if (result.isDenied) {
-                    Swal.fire("ביטול...", "", "info");
-                }
+                    .catch((error) => { console.error(error) })
+            } else {   
+                Swal.fire({
+                    icon: "info",
+                    confirmButtonText:"ביטול...",
+                    position:"top",
+                    timer:"1000"
+                });
+            }
         });
     }
 }

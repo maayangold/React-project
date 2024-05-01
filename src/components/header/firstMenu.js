@@ -1,32 +1,25 @@
-
-
-
-import React from 'react'
-import { useState } from "react";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import React, { useState } from "react";
+import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { LoginOutlined, PersonAddAltOutlined } from "@mui/icons-material";
 
-
-export default function MainMFirstMenuenu() {
+export default function FirstMenu() {
     const [value, setValue] = useState(0);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     return (
-        <div style={{display:"block",position:"absolute",right:"5%"}}>
-            <BottomNavigation
+        <div style={{ backgroundColor: "#bdaeae", padding: "10px" }}> 
+            <BottomNavigation 
                 showLabels
                 value={value}
                 onChange={(event, newValue) => {
                     setValue(newValue);
                 }}
+                style={{ backgroundColor: "transparent"}}
             >
-                <BottomNavigationAction label="התחברות" icon={<LoginOutlinedIcon />} onClick={() => { navigate("/login"); setValue(1) }} value={1} />
-                <BottomNavigationAction label="הרשמה" icon={< PersonAddAltOutlinedIcon/>} onClick={() => { navigate("/signUp"); setValue(2) }} value={2} />
-
+                <BottomNavigationAction label="Login" icon={<LoginOutlined />} onClick={() => { navigate("/login"); setValue(1) }} value={1} />
+                <BottomNavigationAction label="Sign Up" icon={<PersonAddAltOutlined />} onClick={() => { navigate("/signUp"); setValue(2) }} value={2} />
             </BottomNavigation>
-
         </div>
     );
 }

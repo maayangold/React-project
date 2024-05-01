@@ -3,71 +3,70 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup'
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom"
-import { Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react';
 import Button from '@mui/material/Button';
-
-
+import { IconButton } from '@mui/material';
+import { PersonAdd } from '@mui/icons-material';
+import { loginUser } from '../service/serviceUser';
 const Login = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [hasAccount, setHasAccount] = useState(true);
 
+    const schema = yup.object().shape({
+        Username: yup.string().required("שדה חובה"),
+        Password: yup.string().matches(/^[0-9]{4}$/, 'סיסמא חייבת להכיל 4 ספרות').required("שדה חובה"),
+    });
 
-    const dispatch = useDispatch()
-    dispatch({ type: 'SET_USER', pylaod: null })
-    const navigate = useNavigate()
-    const [hasAcount, setHasAcount] = useState(true)
-
-    const schema = yup.object({
-        Username: yup.string().required(" שדה חובה"),
-        Password: yup.string().matches(/^[0-9]{4}$/, 'סיסמא חייבת להכיל 4 ספרות').required(" שדה חובה"),
-    }).required()
-
-
-    const {
-        register, handleSubmit, formState: { errors }, } = useForm({
-            resolver: yupResolver(schema),
-        })
-
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const onSubmit = (data) => {
-
-        axios.post("http://localhost:8080/api/user/login", {
-            Username: data.Username,
-            Password: data.Password
-        })
-            .then(res => {
-
-                dispatch({ type: "SET_USER", payload: res.data })
-                console.log(res.data)
-                navigate(`/home`)
+        dispatch(loginUser(data))
+            .then(() => {
+                navigate(`/home`);
+              
             })
-            .catch(err => {
-                console.log(err);
-                setHasAcount(false);
+            .catch(() => {
+                setHasAccount(false);
+            });
+    };
+    
+    return (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" ,marginTop:"5%"}}>
+            <div style={{ width: "400px", backgroundColor: "#f0f0f0", padding: "50px", borderRadius: "10px" }}>
+                <h2 style={{ textAlign: "center" }}>הכנס שם משתמש וסיסמא</h2>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <input type="text" {...register("Username")} placeholder="שם משתמש" style={{ width: "100%", marginBottom: "10px", padding: "8px" }} />
+                    <p style={{ color: "red", marginBottom: "10px" }}>{errors.Username?.message}</p>
 
-            })
-    }
-    return <div style={{ position: "absolute", left: "35%" }}>
-        {/* <h1>welcome!!</h1> */}
-        <h5>לגישה לאתר עליך להתחבר לחשבון שלך</h5>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text"{...register("Username")} placeholder="הכנס שם" />
-            <p>{errors.Username?.message}</p>
+                    <input type="password" {...register("Password")} placeholder="סיסמה" style={{ width: "100%", marginBottom: "10px", padding: "8px" }} />
+                    <p style={{ color: "red", marginBottom: "10px" }}>{errors.Password?.message}</p>
 
-            <input type="password"{...register("Password")} placeholder="הכנס סיסמא" />
-            <p>{errors.Password?.message}</p>
-            {(!hasAcount) ?
-                <div> <label>עדיין אין לך חשבון?👈</label><Link className='link' to={'/signUp'}>לחץ כאן</Link></div>
-                : <></>}
+                    {!hasAccount && (
+                        <p style={{ color: "red", marginBottom: "10px" }}>שם משתמש או סיסמה שגויים</p>
+                    )}
 
-            <br />
-            <br />
-            <Button variant="outlined" color="secondary" size="large" type="submit" className='but' >כניסה</Button>
-        </Form>
-    </div>
-}
+                    <Button variant="contained" color="primary" size="large" type="submit" style={{ width: "100%" }}>כניסה</Button>
 
-
+                    {!hasAccount && (
+                        <div style={{ marginTop: "10px" }}>
+                            <p>עדיין אין לך חשבון?</p>
+                            <Link to={'/signUp'} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+                                <IconButton size="small" style={{ marginRight: "5px" }}>
+                                    <PersonAdd />
+                                </IconButton>
+                                הרשם כאן
+                            </Link>
+                        </div>
+                    )}
+                </Form>
+            </div>
+        </div>
+    );
+};
 
 export default Login;

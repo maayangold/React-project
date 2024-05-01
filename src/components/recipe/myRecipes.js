@@ -1,77 +1,63 @@
-import * as React from 'react';
-import { useEffect, useState } from "react";
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { blue, red } from '@mui/material/colors';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox } from '@mui/material';
-import { useNavigate } from "react-router-dom";
-import Button from '@mui/material/Button';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import { addBuying, deleteBuying } from '../service/serviceBuying';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { Card, CardHeader, CardMedia, CardContent, CardActions, Button, Typography, Avatar, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { blue } from '@mui/material/colors';
+import { CakeOutlined as CakeOutlinedIcon, PersonOutlineOutlined as PersonOutlineOutlinedIcon, LocalDiningOutlined as LocalDiningOutlinedIcon } from '@mui/icons-material';
+import { deleteRecipe, getRecipes } from '../service/serviceRecipe';
+import { getCategories } from '../service/serviceCategory';
 
-
-export default function MyRecipes() {
+const MyRecipes = () => {
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user.user)
+    const navigate = useNavigate();
+    const user = useSelector(state => state.user.user);
+    const userId = user ? user.Id : null; // Ensure user object exists before accessing Id property
+    const categories = useSelector(state => state.categories.categories);
+    const recipes = useSelector(state => state.recipes.recipes);
+    const [selectCategory, setSelectCategory] = useState(0);
+    const [level, setLevel] = useState(0);
+    const [time, setTime] = useState(0);
 
-    const recipes = useSelector(state => state.recipes.recipes)
-    const selectedRecipe = useSelector(state => state.recipes.selectedRecipe)
-    const [expandedMap, setExpandedMap] = React.useState({});
-    const navigate = useNavigate()
 
-    const handleExpandClick = (recipeId) => {
-        setExpandedMap((prev) => ({
-            ...prev,
-            [recipeId]: !prev[recipeId],
-
-        }));
+    const handleDelete = (recipe) => {
+        dispatch(deleteRecipe(recipe));
     };
-    const ExpandMore = styled((props) => {
-        const { expand, ...other } = props;
-        return <IconButton {...other} />;
-    })(({ theme, expand }) => ({
-        transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    }));
-    const deleteRecipe = (id) => {
-        dispatch(deleteRecipe(selectedRecipe.Id))
-    }
-    const Update = (recipe) => {
 
+    const handleUpdate = (recipe) => {
         dispatch({ type: 'SET_SELECTED_RECIPE', payload: recipe });
-        navigate('/addRcipe')
-    }
-    const Delete = (recipe) => {
-        dispatch(deleteRecipe(recipe))
-    }
-    return (
+        navigate('/addRecipe');
+    };
 
-        <div>
-            <h4 style={{ fontSize: "25px" }}>המתכונים של {user.Name}</h4>
-            <div className='tbl'>
-                {recipes?.map((recipe) =>
-                    (user.Id == recipe.UserId) ? (
-                        <Card key={recipe.Id} sx={{ maxWidth: 345, marginBottom: '20px' }}>
+    const handleShowDetails = (recipe) => {
+        navigate(`/recipe/${recipe.Id}`, { state: { recipe } });
+    };
+
+
+    const renderRecipeActions = (recipe) => {
+        if (userId === recipe?.UserId) {
+            return (
+                <div>
+                    <Button variant="outlined" color="secondary" onClick={() => handleDelete(recipe)}>מחיקה</Button>
+                    <Button variant="outlined" color="secondary" onClick={() => handleUpdate(recipe)}>עריכה</Button>
+                </div>
+            );
+        }
+        return null;
+    };
+
+
+    return (
+        <div className="tbl">
+            {recipes?.length > 0 ? (
+                recipes.map((recipe) => (
+                    (user.Id == recipe.UserId)? (
+                        <Card key={recipe.Id} sx={{ width: "400px", marginBottom: '20px' }}>
                             <CardHeader
                                 avatar={
                                     <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
-
-                                        <PersonOutlineOutlinedIcon />
-
+                                        {userId === recipe?.UserId ?
+                                            <PersonOutlineOutlinedIcon /> :
+                                            <LocalDiningOutlinedIcon />}
                                     </Avatar>
                                 }
                                 title={recipe.Name}
@@ -81,6 +67,8 @@ export default function MyRecipes() {
                                 height="194"
                                 image={recipe.Img}
                                 alt="image not defined"
+                                onClick={() => handleShowDetails(recipe)}
+                                className="recipe-img" // Add a class name for styling
                             />
                             <CardContent>
                                 <Typography variant="body2" color="text.secondary">
@@ -88,48 +76,24 @@ export default function MyRecipes() {
                                 </Typography>
                             </CardContent>
                             <CardActions disableSpacing>
-                                <ExpandMore
-                                    expand={expandedMap[recipe.Id]}
-                                    onClick={() => handleExpandClick(recipe.Id)}
-                                    aria-expanded={expandedMap[recipe.Id]}
-                                    aria-label="show more"
-                                >
-                                    <ExpandMoreIcon />
-                                </ExpandMore>
+                                {renderRecipeActions(recipe)}
+                                <Button variant="outlined" color="secondary" onClick={() => handleShowDetails(recipe)}>להדפסת המתכון</Button>
                             </CardActions>
-                            <Collapse in={expandedMap[recipe.Id]} timeout="auto" unmountOnExit>
-                                <CardContent>
-                                    <Typography paragraph>:מצרכים</Typography>
-                                    {recipe.Ingrident?.map((ing) => (
-                                        <Typography paragraph className='direction' key={ing.Name}>
-                                            <Checkbox onClick={(e) => {
-                                                const isChecked = e.target.checked;
-                                                if (isChecked) {
-
-                                                    dispatch(addBuying({ userId: user.Id, name: ing.Name, count: ing.Count }))
-                                                }
-
-                                            }} />
-                                            {ing.Count + ' ' + ing.Type + ' ' + ing.Name}
-                                        </Typography>
-                                    ))}
-                                    <Typography paragraph>:הוראות</Typography>
-                                    <Typography paragraph>
-                                        {recipe?.Instructions}
-                                    </Typography>
-
-                                </CardContent>
-                            </Collapse>
-                            <div>
-                            <Button variant="outlined" color="secondary" onClick={() => Delete(recipe)}>מחיקה</Button>
-                            <Button variant="outlined" color="secondary" onClick={() => Update(recipe)}>עריכה</Button>
-
-                            </div>
-                            <Button variant="outlined" color="secondary" onClick={() => window.print()} >הדפס מתכון </Button>
                         </Card>
-
-                    ) : null)}
-            </div>
+                    ) : null
+                ))
+            ) : (
+                <div>
+                    <Typography variant="body1" color="text.secondary">
+                        אין לך עדיין מתכונים, הוסף מתכונים עכשיו!
+                    </Typography>
+                    <Button variant="contained" color="primary" onClick={() => navigate('/addRecipe')}>
+                        הוסף מתכון חדש
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };
+
+export default MyRecipes;

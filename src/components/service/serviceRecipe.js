@@ -22,10 +22,10 @@ export const deleteRecipe = (recipe) => {
 
         Swal.fire({
             title: "אתה בטוח שאתה רוצה למחוק?",
-            showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: "Delete",
-            denyButtonText: `Don't Delete`
+            denyButtonText: `Cancel`,
+            position:"top"
         }).then((result) => {
 
             if (result.isConfirmed) {
@@ -36,14 +36,18 @@ export const deleteRecipe = (recipe) => {
 
                     })
                     .catch((error) => { console.error(error) })
-            } else if (result.isDenied) {
-                Swal.fire("ביטול...", "", "info");
+            } else {   
+                Swal.fire({
+                    icon: "info",
+                    confirmButtonText:"ביטול...",
+                    position:"top",
+                    timer:"1000"
+                });
             }
         });
     }
 }
 export const addRecipe = (recipe) => {
-    console.log("!!!!!!!!!")
     return (dispatch) => {
         axios.post('http://localhost:8080/api/recipe', recipe)
             .then((res) => {
@@ -52,7 +56,7 @@ export const addRecipe = (recipe) => {
                 Swal.fire({ icon: 'success', position: 'center', title: 'המתכון הוסף בהצלחה' });
             })
             .catch((err) => {
-                Swal.fire({ icon: 'error', position: 'center', title: err.response?.data });
+                Swal.fire({ icon: 'error', position: 'top', title: err.response?.data });
             });
     };
 };
@@ -64,7 +68,7 @@ export const editRecipe = (recipe) => {
             Swal.fire({ icon: 'success', position: 'center', title: 'המתכון עודכן בהצלחה' })
 
         }).catch((error) => {
-            Swal.fire({ icon: 'error', position: 'center', title: error.response?.data })
+            Swal.fire({ icon: 'error', position: 'top', title: error.response?.data })
         })
 }
 

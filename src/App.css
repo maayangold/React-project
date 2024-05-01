@@ -2,38 +2,96 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.footer {
+  background-color: #bdaeae;
+  padding: 30px;
+  height: 10vh;
+}
+.title {
+  color: rgb(94, 28, 4);
+  font-family:'Times New Roman', Times, serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.background {
+  position: relative;
+  width: 100vw;
+  
   min-height: 100vh;
+}
+
+.background::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/cookies.jpg'); 
+  background-size: cover;
+  background-color: aliceblue;
+  background-repeat: no-repeat;
+  opacity: 0.5; 
+  z-index: -1;
+}
+.recipe-img {
+  position: relative;
+  cursor: pointer ;
+  border-radius: 10px;
+  transition: transform 0.3s, border 0.3s;
+
+}
+
+.recipe-img:hover {
+  border: 2px solid rgb(109, 80, 38);
+  transform: scale(0.95);
+}
+.select-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
- 
+  gap: 20px; 
 }
 
-.App-link {
-  color: #61dafb;
+.select {
+  padding: 10px;
+  border-radius: 5px; 
+  background-color: #fff;
+  font-size: 36px;
+  
+  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+
+
+
+.movingRecipe {
+  position: relative;
+  background-position: center;
+  right: 25%;
+ width:50vw;
+  height:50vh;
+  background-size: cover;
+  /* background-repeat: no-repeat; */
+  background-position: center;
+  animation: changeBackground 10s infinite;
+}
+
+
+@keyframes changeBackground {
+  0% {
+    background-image: url('images/backgroung.jpg');
   }
-  to {
-    transform: rotate(360deg);
+  25% {
+    background-image: url('images/back1.jpg');
+  }
+  50% {
+    background-image: url('images/logo1.jpg');
+  }
+  75% {
+    background-image: url('images/wow.jpg');
+  }
+  100% {
+    background-image: url('images/vafel.png');
   }
 }
+
+

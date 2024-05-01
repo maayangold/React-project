@@ -6,18 +6,16 @@ import { Form } from 'semantic-ui-react';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { addCategory } from "../service/serviceCategory";
+import { useEffect } from "react";
+import { addCategory, getCategories } from "../service/serviceCategory";
 import Swal from "sweetalert2";
 
 export default function AddCategory() {
     const categories = useSelector(state => state.categories.categories);
-    const [newCategories, setNewCategories] = useState([]);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const schema = yup.object({
-        Name: yup.string().required(" שדה חובה")
+        Name: yup.string().required("שדה חובה")
     });
 
     const {
@@ -26,42 +24,40 @@ export default function AddCategory() {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const categoryName = data.Name;
 
-        if (!newCategories.some(category => category.Name === categoryName)) {
-            dispatch(addCategory(data));
-            setNewCategories(prev => [...prev, data]);
-            Swal.fire({ icon: 'success', position: 'center', title: ' קטגוריה חדשה נוצרה' })
+        // Check if the category already exists
+        const categoryExists = categories.some(category => category.Name === categoryName);
 
+        if (!categoryExists) {
+                 dispatch(addCategory(data));
         } else {
-            Swal.fire({ icon: 'error', position: 'center', title: ' קטגוריה קיימת! ' })
-
-
-
+            Swal.fire({ icon: 'error', position: 'center', title: 'קטגוריה כבר קיימת' });
         }
     };
 
-
+    // Fetch categories when the component mounts or when a new category is added
+    useEffect(() => {
+        dispatch(getCategories());
+    }, [categories,dispatch]);
 
     return (
-        <>
-            <h4 >הוספת קטגוריה  </h4>
-
-            <div >
-                <ul >
+        <div style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: "#f0f0f0", padding: "20px", width: "70%", margin: "10%" }}>
+            <div style={{ flex: '1' }}>
+                <h4>קטגוריות קיימות</h4>
+                <ul>
                     {categories.map(x => <li style={{ listStyle: "none" }} key={x?.Id}>{x?.Name}</li>)}
-                    {newCategories.map(x => <li key={x?.Id}>{x?.Name}</li>)}
                 </ul>
             </div>
-            <div >
+            <div style={{ flex: '1', marginLeft: '20px' }}>
+                <h4>הוספת קטגוריה</h4>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Input type="text"{...register("Name")} placeholder="הכנס שם קטגוריה" />
+                    <Input type="text" {...register("Name")} placeholder="הכנס שם קטגוריה" />
                     <p>{errors.Name?.message}</p>
-                    <Button variant="outlined" color="secondary" type="submit" className='but' >אישור</Button>
+                    <Button variant="contained" color="warning" type="submit" className='but'>אישור</Button>
                 </Form>
             </div>
-
-        </>
+        </div>
     );
 }
