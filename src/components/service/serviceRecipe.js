@@ -25,22 +25,23 @@ export const deleteRecipe = (recipe) => {
             showCancelButton: true,
             confirmButtonText: "Delete",
             denyButtonText: `Cancel`,
-            position:"top"
+            position:"center"
         }).then((result) => {
 
             if (result.isConfirmed) {
                 axios.post(`http://localhost:8080/api/recipe/delete/:${recipe.Id}`)
                     .then(() => {
                         dispatch({ type: "DELETE_RECIPE", payload: recipe })
-                        Swal.fire({ icon: 'success', position: 'center', title: '!המתכון נמחק בהצלחה' });
+                        Swal.fire({ icon: 'success', position: 'top-start', title: 'המתכון נמחק בהצלחה' ,showConfirmButton: false, timer:"1000"});
 
                     })
                     .catch((error) => { console.error(error) })
             } else {   
                 Swal.fire({
                     icon: "info",
-                    confirmButtonText:"ביטול...",
-                    position:"top",
+                    title: 'ביטול' 
+                    ,showConfirmButton: false,
+                    position:"center",
                     timer:"1000"
                 });
             }
@@ -53,10 +54,10 @@ export const addRecipe = (recipe) => {
             .then((res) => {
                 dispatch({ type: "ADD_RECIPE", payload: res.data });
                 console.log(res.data);
-                Swal.fire({ icon: 'success', position: 'center', title: 'המתכון הוסף בהצלחה' });
+                Swal.fire({ icon: 'success', position: 'top-start', title: 'המתכון התווסף בהצלחה', timer:"1000" ,showConfirmButton: false});
             })
             .catch((err) => {
-                Swal.fire({ icon: 'error', position: 'top', title: err.response?.data });
+                Swal.fire({ icon: 'error', position: 'top-start', title: err.response?.data });
             });
     };
 };
@@ -65,10 +66,10 @@ export const editRecipe = (recipe) => {
     return dispatch => axios.post('http://localhost:8080/api/recipe/edit', recipe).then(
         (res) => {
             dispatch({ type: "EDIT_RECIPE", payload: res.data })
-            Swal.fire({ icon: 'success', position: 'center', title: 'המתכון עודכן בהצלחה' })
+            Swal.fire({ icon: 'success', position: 'top-start', title: 'המתכון עודכן בהצלחה' , timer:"1000",showConfirmButton: false})
 
         }).catch((error) => {
-            Swal.fire({ icon: 'error', position: 'top', title: error.response?.data })
+            Swal.fire({ icon: 'error', position: 'top-start', title: error.response?.data })
         })
 }
 

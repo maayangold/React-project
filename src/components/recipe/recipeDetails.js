@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Typography, Grid, Checkbox, Button, Icon } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBuying } from '../service/serviceBuying';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { Print } from '@mui/icons-material';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 const RecipeDetails = () => {
 
     const location = useLocation();
@@ -34,10 +35,10 @@ const RecipeDetails = () => {
         return `${duration} דקות`;
     };
 
-    const handleCheckboxChange = async (ing) => {
+    const handleShoop = async (ing) => {
         try {
-            const isAlreadyChecked = buyList.some(item => item.Name === ing.Name);
-            if (!isAlreadyChecked) {
+            const isExsist = buyList.some(item => item.Name === ing.Name);
+            if (!isExsist) {
                 await dispatch(addBuying({ UserId: user.Id, Name: ing.Name, Count: 1 }));
                 setBuyList([...buyList, ing]);
             } else {
@@ -56,7 +57,7 @@ const RecipeDetails = () => {
                     {recipe.Name}
                 </Typography>
                 <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
-                   {recipe.Description} <AutoAwesomeIcon /> 
+                    {recipe.Description} <AutoAwesomeIcon />
                 </Typography>
                 <Typography variant="body1" style={{ textAlign: 'right' }}>
                     <RestaurantIcon /> קטגוריה: {getCategoryName(recipe.CategoryId)}
@@ -79,10 +80,16 @@ const RecipeDetails = () => {
                 <Grid container spacing={2}>
                     {recipe.Ingridents.map((ing, index) => (
                         <Grid item xs={12} key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                            <Checkbox
-                                checked={false}
-                                onChange={() => handleCheckboxChange(ing)}
-                            />
+
+                            <Button
+                                variant="outlined"
+                                color="warning"
+                                startIcon={<ShoppingCartIcon />} 
+                                onClick={() => handleShoop(ing)}
+                            >
+                                הוסף לעגלה
+                            </Button>
+
                             <Typography variant="body1">
                                 <Icon>{ing.Icon}</Icon> {ing.Count} {ing.Type} {ing.Name}
                             </Typography>

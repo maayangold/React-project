@@ -1,19 +1,20 @@
-import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const NotFound = () => {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "5%" }}>
+      <div style={{ width: "50%", backgroundColor: "#f0f0f0", padding: "50px", borderRadius: "10px" }}>
 
- 
-    return (<>
-
-       <div>
-        <p>ERROR</p>
-       <h4>page not found!!!!:(</h4>
-       </div>
-      <Link to="/"style={{textDecoration:"none",color:"#61dafb"}}>
-      <Button variant="outlined" > ➡️ לחזרה</Button>
-      </Link>
-    </>)
+        <h2 style={{ fontSize: '4rem', marginBottom: '20px' }}>404</h2>
+        <p style={{ fontSize: '2.5rem', marginBottom: '20px' }}>.Oops! Page not found🤔</p>
+        <p style={{ fontSize: '1rem', marginBottom: '40px' }}>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <button style={{ padding: '10px 20px', fontSize: '1rem', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Go to Home</button>
+        </Link>
+      </div>
+    </div>
+  );
 }
+
 export default NotFound;
-//  https://static.wixstatic.com/media/91dd81_b8ca68b816cc4d0986ed633aa1d2a060~mv2_d_2650_1767_s_2.jpg/v1/fill/w_217,h_170,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/91dd81_b8ca68b816cc4d0986ed633aa1d2a060~mv2_d_2650_1767_s_2.jpg

@@ -73,14 +73,25 @@ export default function AddRecipe() {
         }
     }, [recipe, apppendIngrident, apppendInstruction, removeIngrident, removeInstruction]);
 
-
+    const mapDifficultyToValue = (difficulty) => {
+        switch (difficulty) {
+            case 1:
+                return 1; // Map "קל" to 1
+            case 2:
+                return 2; // Map "בינוני" to 2
+            case 3:
+                return 3; // Map "קשה" to 3
+            default:
+                return 1; // Default to "קל"
+        }
+    };
     const onSubmit = (data) => {
         let recipeToSend = {
             Id: recipe?.Id,
-            Name: data.Name, UserId: user.Id, CategoryId: data.CategoryId, Img: data.Img, Duration: data.Duration, Difficulty: data.Difficulty, Description: data.Description,
+            Name: data.Name, UserId: user.Id, CategoryId: data.CategoryId, Img: data.Img, Duration: data.Duration, Difficulty: mapDifficultyToValue(data.Difficulty), Description: data.Description,
             Ingridents: data.Ingridents, Instructions: data.Instructions
         }
-       console.log(recipeToSend)
+        console.log(recipeToSend)
         if (!recipe) {
             dispatch(addRecipe(recipeToSend))
         } else {
@@ -135,15 +146,15 @@ export default function AddRecipe() {
                         <TextField
                             select
                             fullWidth
-                            label="רמת קושי (1-10)"
+                            label="רמת קושי"
                             {...register("Difficulty")}
                             error={!!errors.Difficulty}
                             helperText={errors.Difficulty?.message}
-                            defaultValue={recipe?recipe.Difficulty:1}
+                            defaultValue={recipe ? recipe.Difficulty : 1} // Set default value based on recipe's Difficulty or 1 if not available
                         >
-                            {[...Array(10)].map((_, index) => (
-                                <MenuItem key={index + 1} value={index + 1}>{index + 1}</MenuItem>
-                            ))}
+                            <MenuItem value={1}>קל</MenuItem>
+                            <MenuItem value={2}>בינוני</MenuItem>
+                            <MenuItem value={3}>קשה</MenuItem>
                         </TextField>
                     </Grid>
                     <Grid item xs={12}>

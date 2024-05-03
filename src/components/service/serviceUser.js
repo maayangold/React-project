@@ -14,10 +14,10 @@ export const addUser = (data) => {
             }).then(response => {
                 dispatch({ type: 'SET_USER', payload: response.data });
                 localStorage.setItem('userData', JSON.stringify(response.data));
-                Swal.fire({ icon: 'success', position: 'top', title: ' ברוך הבא נרשמת בהצלחה' });
+                Swal.fire({ icon: 'success', position: 'top-start', timer:"1000", title: ' ברוך הבא! נרשמת בהצלחה' ,showConfirmButton: false});
                 resolve();
             }).catch(error => {
-                Swal.fire({ icon: 'error', position: 'top', title: error.response?.data });
+                Swal.fire({ icon: 'error', position: 'top-start', title: error.response?.data });
                 reject();
             });
         });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardMedia, CardContent, CardActions, Button, Typography, Avatar, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { CakeOutlined as CakeOutlinedIcon, PersonOutlineOutlined as PersonOutlineOutlinedIcon, LocalDiningOutlined as LocalDiningOutlinedIcon } from '@mui/icons-material';
@@ -45,8 +45,8 @@ const AllRecipes = () => {
         if (userId === recipe?.UserId) {
             return (
                 <div>
-                    <Button variant="outlined" color="secondary" onClick={() => handleDelete(recipe)}>מחיקה</Button>
-                    <Button variant="outlined" color="secondary" onClick={() => handleUpdate(recipe)}>עריכה</Button>
+                    <Button variant="contained" color="error" onClick={() => handleDelete(recipe)}>מחיקה</Button>
+                    <Button variant="contained" color="info" onClick={() => handleUpdate(recipe)}>עריכה</Button>
                 </div>
             );
         }
@@ -58,6 +58,7 @@ const AllRecipes = () => {
         <div>
             <h4 style={{ fontSize: "35px" }}>כל המתכונים  </h4>
             <div className="select-container">
+                <Typography variant="h5" style={{ marginBottom: '10px', fontWeight: 'bold', color: "coral" }}>בחר פריטים לסינון:</Typography>
                 <FormControl className="select">
                     <InputLabel id="category-label">בחר קטגוריה</InputLabel>
                     <Select
@@ -87,7 +88,7 @@ const AllRecipes = () => {
                 </FormControl>
 
                 <FormControl className="select">
-                    <InputLabel id="duration-label">משך הכנה</InputLabel>
+                    <InputLabel id="duration-label"> משך הכנה מקסימלי</InputLabel>
                     <Select
                         labelId="duration-label"
                         id="duration-select"
@@ -95,10 +96,10 @@ const AllRecipes = () => {
                         onChange={(e) => setTime(e.target.value)}
                     >
                         <MenuItem value={0}>כל זמני ההכנה</MenuItem>
-                        <MenuItem value={10}>10 דקות</MenuItem>
-                        <MenuItem value={15}>15 דקות</MenuItem>
-                        <MenuItem value={30}>חצי שעה</MenuItem>
-                        <MenuItem value={60}>שעה</MenuItem>
+                        <MenuItem value={10}>10 דקות   </MenuItem>
+                        <MenuItem value={15}>15 דקות   </MenuItem>
+                        <MenuItem value={30}>חצי שעה   </MenuItem>
+                        <MenuItem value={60}>שעה       </MenuItem>
                     </Select>
                 </FormControl>
             </div>
@@ -116,7 +117,11 @@ const AllRecipes = () => {
                                             <LocalDiningOutlinedIcon />}
                                     </Avatar>
                                 }
-                                title={recipe.Name}
+                                title={
+                                    <Typography variant="h5" style={{ fontFamily: "Arial, sans-serif", color: "coral" }}>
+                                        {recipe.Name}
+                                    </Typography>
+                                }
                             />
                             <CardMedia
                                 component="img"
@@ -127,13 +132,13 @@ const AllRecipes = () => {
                                 className="recipe-img" // Add a class name for styling
                             />
                             <CardContent>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body1" color="text.secondary">
                                     {recipe.Description}
                                 </Typography>
                             </CardContent>
                             <CardActions disableSpacing>
                                 {renderRecipeActions(recipe)}
-                                <Button variant="outlined" color="secondary" onClick={() => handleShowDetails(recipe)}>להדפסת המתכון</Button>
+                                <Button variant="contained" color="warning" onClick={() => handleShowDetails(recipe)}>להדפסת המתכון</Button>
                             </CardActions>
                         </Card>
                     ) : null

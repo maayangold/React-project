@@ -3,14 +3,14 @@ const recipe = [
         Id: 1,
         Name: "עוגה כושית",
         UserId: 1,
-        CategoryId: 2,
+        CategoryId: 5,
         Img: "https://img.mako.co.il/2023/03/27/oga_pereg_choclet_autoOrient_i.jpg",
         Duration: "50",
-        Difficulty: 1,
+        Difficulty: 3,
         Description: "עוגה קלה להכנה",
         Ingridents
 : [
-            { Name: "בייצים", Count: 5, Type: "-" },
+            { Name: "ביצים", Count: 5, Type: "-" },
             { Name: "סוכר", Count: 1.5, Type: "כוסות" },
             { Name: "קמח", Count: 5, Type: "כפות" }
         ],
@@ -37,7 +37,7 @@ const recipe = [
    ,
     {
         Id:3,
-        Name:"גבינ\"ש",
+        Name:"עוגת גבינת שמנת",
         UserId:1,
         CategoryId:1,
         Img:"https://happykitchen.co.il/wp-content/uploads/2020/05/עוגת-גבינה-פרורים-פרוסה.jpg",

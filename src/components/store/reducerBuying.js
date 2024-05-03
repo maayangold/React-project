@@ -20,19 +20,21 @@ export default function ReducerBuying(state = initialState, action) {
             buyingList.push(action.payload);
             return { ...state, buyingList }
         }
-        case actionType.EDIT_BUYING: {
-            const buying = [...state.buyingList];
-            const findeIndex = buying.findIndex(x => x.Id === action.payload.Id);
-            buying[findeIndex].Count = action.payload.Count;
-            return {
-                ...state,
-                buyingList: buying
-            }
-        }
-        case actionType.DELETE_BUYING: {
-            const recipes = state.recipes.filter(r => r.Id !== action.payload);
-            return { ...state, recipes }
 
+        case actionType.EDIT_BUYING: {
+            const updatedBuyingList = state.buyingList.map(item => {
+                if (item.Id === action.payload.Id) {
+                    return { ...item, Count: action.payload.Count };
+                }
+                return item;
+            });
+            return { ...state, buyingList: updatedBuyingList };
+        }
+        
+
+        case actionType.DELETE_BUYING: {
+            const buyingList = state.buyingList.filter(item => item.Id !== action.payload);
+            return { ...state, buyingList };
         }
 
 

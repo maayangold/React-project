@@ -1,10 +1,9 @@
-import { Input } from "@mui/base";
+import { Input } from "@mui/material";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 import Button from '@mui/material/Button';
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { addCategory, getCategories } from "../service/serviceCategory";
@@ -33,7 +32,7 @@ export default function AddCategory() {
         if (!categoryExists) {
                  dispatch(addCategory(data));
         } else {
-            Swal.fire({ icon: 'error', position: 'center', title: 'קטגוריה כבר קיימת' });
+            Swal.fire({ icon: 'info', position: 'top', title: 'קטגוריה  קיימת',timer:"1000",showConfirmButton:false });
         }
     };
 
@@ -43,19 +42,22 @@ export default function AddCategory() {
     }, [categories,dispatch]);
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: "#f0f0f0", padding: "20px", width: "70%", margin: "10%" }}>
-            <div style={{ flex: '1' }}>
-                <h4>קטגוריות קיימות</h4>
-                <ul>
-                    {categories.map(x => <li style={{ listStyle: "none" }} key={x?.Id}>{x?.Name}</li>)}
+        <div style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: "#f0f0f0", padding: "20px", margin: "10%" }}>
+            <div style={{ flex: '1', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+                <h4 style={{ marginBottom: '20px' }}>קטגוריות קיימות</h4>
+                <ul style={{ padding: 0 }}>
+                    {categories.map(x => (
+                        <li key={x?.Id} style={{ listStyle: "none", marginBottom: '8px' }}>{x?.Name}</li>
+                    ))}
                 </ul>
             </div>
-            <div style={{ flex: '1', marginLeft: '20px' }}>
-                <h4>הוספת קטגוריה</h4>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Input type="text" {...register("Name")} placeholder="הכנס שם קטגוריה" />
+            <div style={{ flex: '1', marginLeft: '20px'}}>
+                <h4 style={{ marginBottom: '20px' }}>הוספת קטגוריה</h4>
+                <Form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column',padding:"100px" }}>
+                    <Input type="text" {...register("Name")} placeholder="הכנס שם קטגוריה" style={{position:"relative",width:"50%" }}/>
                     <p>{errors.Name?.message}</p>
-                    <Button variant="contained" color="warning" type="submit" className='but'>אישור</Button>
+                    <Button variant="contained" type="submit" style={{ marginTop: '10px',position:"relative",width:"120px" }}>אישור</Button>
                 </Form>
             </div>
         </div>

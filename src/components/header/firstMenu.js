@@ -6,9 +6,10 @@ import { LoginOutlined, PersonAddAltOutlined } from "@mui/icons-material";
 export default function FirstMenu() {
     const [value, setValue] = useState(0);
     const navigate = useNavigate();
+    const iconStyle = { fontSize: "35px" }; 
 
     return (
-        <div style={{ backgroundColor: "#bdaeae", padding: "10px" }}> 
+        <div style={{ backgroundColor: "#bdaeae", padding: "20px" }}> 
             <BottomNavigation 
                 showLabels
                 value={value}
@@ -17,8 +18,8 @@ export default function FirstMenu() {
                 }}
                 style={{ backgroundColor: "transparent"}}
             >
-                <BottomNavigationAction label="Login" icon={<LoginOutlined />} onClick={() => { navigate("/login"); setValue(1) }} value={1} />
-                <BottomNavigationAction label="Sign Up" icon={<PersonAddAltOutlined />} onClick={() => { navigate("/signUp"); setValue(2) }} value={2} />
+                <BottomNavigationAction label="התחברות" icon={<LoginOutlined style={iconStyle} />} onClick={() => { navigate("/login"); setValue(1) }} value={1} />
+                <BottomNavigationAction label="הרשמה למשתמש חדש" icon={<PersonAddAltOutlined style={iconStyle} />} onClick={() => { navigate("/signUp"); setValue(2) }} value={2} />
             </BottomNavigation>
         </div>
     );

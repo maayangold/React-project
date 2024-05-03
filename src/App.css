@@ -7,6 +7,9 @@
   padding: 30px;
   height: 10vh;
 }
+.header-link{
+  font-size: 26px;
+}
 .title {
   color: rgb(94, 28, 4);
   font-family:'Times New Roman', Times, serif;
@@ -15,24 +18,27 @@
 .background {
   position: relative;
   width: 100vw;
-  
   min-height: 100vh;
 }
 
 .background::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 50%; /* Position from top 50% */
+  left: 50%; /* Position from left 50% */
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-image: url('images/cookies.jpg'); 
+  background-image: url('images/party.jpg');
   background-size: cover;
   background-color: aliceblue;
   background-repeat: no-repeat;
-  opacity: 0.5; 
+  background-position: center; /* Set background position to center */
+  opacity: 0.5;
   z-index: -1;
 }
+
+
 .recipe-img {
   position: relative;
   cursor: pointer ;
@@ -43,7 +49,7 @@
 
 .recipe-img:hover {
   border: 2px solid rgb(109, 80, 38);
-  transform: scale(0.95);
+  transform: scale(1.20);
 }
 .select-container {
   display: flex;
@@ -56,12 +62,14 @@
   border-radius: 5px; 
   background-color: #fff;
   font-size: 36px;
-  
+
   
 }
 
-
-
+#select-label{
+  font-size: 20px;
+  font-weight: bold;
+}
 
 .movingRecipe {
   position: relative;
@@ -78,10 +86,10 @@
 
 @keyframes changeBackground {
   0% {
-    background-image: url('images/backgroung.jpg');
+    background-image: url('images/cake.jpg');
   }
   25% {
-    background-image: url('images/back1.jpg');
+    background-image: url('images/cookies.jpg');
   }
   50% {
     background-image: url('images/logo1.jpg');
@@ -90,7 +98,7 @@
     background-image: url('images/wow.jpg');
   }
   100% {
-    background-image: url('images/vafel.png');
+    background-image: url('images/cake.jpg');
   }
 }
 

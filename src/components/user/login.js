@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup'
-import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Form } from 'semantic-ui-react';
@@ -36,7 +35,7 @@ const Login = () => {
     };
     
     return (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" ,marginTop:"5%"}}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" ,marginTop:"5%"}}>
             <div style={{ width: "400px", backgroundColor: "#f0f0f0", padding: "50px", borderRadius: "10px" }}>
                 <h2 style={{ textAlign: "center" }}>הכנס שם משתמש וסיסמא</h2>
                 <Form onSubmit={handleSubmit(onSubmit)}>

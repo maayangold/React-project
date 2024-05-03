@@ -20,15 +20,17 @@ export const addCategory = (data) => {
                 dispatch({ type: "ADD_CATEGORY", payload: data });
                 Swal.fire({
                     icon: 'success',
-                    title: 'קטגוריה חדשה נוצרה',
+                    position:"top",
+                    title: 'הקטגוריה  התווספה בהצלחה',
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1000
                 });
             })
             .catch((error) => {
                 console.error(error);
                 Swal.fire({
                     icon: 'error',
+                    position:"top",
                     title: 'שגיאה',
                     text: 'הייתה בעיה בהוספת הקטגוריה, אנא נסה שוב מאוחר יותר.'
                 });
